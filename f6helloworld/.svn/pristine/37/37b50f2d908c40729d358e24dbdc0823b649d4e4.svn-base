@@ -1,0 +1,58 @@
+# coding: utf-8
+from flask import Flask, jsonify
+from datetime import datetime, timedelta
+
+indexPage = open('index.html').read()
+app = Flask('server')
+
+@app.route('/')
+def index():
+    return indexPage
+
+@app.route('/api/buildings')
+def buildings():
+    return jsonify({'buildings': [
+        {'building': '教1', 'uri': '/api/jiao1/'},
+        {'building': '教2', 'uri': '/api/jiao2/'},
+        {'building': '教3', 'uri': '/api/jiao3/'},
+        {'building': '教4', 'uri': '/api/jiao4/'},
+        ]})
+
+@app.route('/api/jiao<int:building>/floors')
+def floors(building):
+    prefix = '/api/jiao{}/'.format(building)
+    if building == 1:
+        return jsonify({'floors': [
+            {'floor': 1, 'uri': prefix + 'floor1'},
+            {'floor': 2, 'uri': prefix + 'floor2'},
+            ]})
+    elif building == 3:
+        return jsonify({'floors': [
+            {'floor': 1, 'uri': prefix + 'floor1'},
+            {'floor': 2, 'uri': prefix + 'floor2'},
+            {'floor': 3, 'uri': prefix + 'floor3'},
+            {'floor': 4, 'uri': prefix + 'floor4'},
+            ]})
+    else:
+        return jsonify({'floors': []})
+
+@app.route('/api/<int:building>/<int:classroom>/classes')
+def classes(building, classroom):
+    today = datetime.today().date()
+    yesterday = today - timedelta(days=1)
+    tomorrow = today + timedelta(days=1)
+    return jsonify({'classes': [
+        {'date': str(yesterday), 'classses': [
+            {'name': u'高级数理逻辑', 'duration': [1,2]},
+            ]},
+        {'date': str(today), 'classses': [
+            {'name': u'图论及其应用', 'duration': [1,2,3]},
+            {'name': u'中国特色社会主义理论与实践研究', 'duration': [5,6]},
+            ]},
+        {'date': str(tomorrow), 'classses': [
+            {'name': u'计算机网络原理', 'duration': [1,2]},
+            ]},
+        ]})
+
+if __name__ == '__main__':
+    app.run(debug=True)

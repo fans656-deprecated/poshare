@@ -1,0 +1,57 @@
+# coding: utf-8
+from flask import Flask, jsonify, request, g
+import flask
+
+import sqlite3
+from datetime import datetime, timedelta
+
+app = Flask('server')
+
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = sqlite3.connect('data.db')
+    return db
+
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
+
+def flatten(a):
+    return [t[0] for t in a]
+
+@app.route('/')
+def root():
+    return app.send_static_file('index.html')
+
+@app.route('/buildings')
+def buildings():
+    cur = get_db().cursor()
+    cur.execute('select distinct building from rooms')
+    return jsonify({'buildings': flatten(cur.fetchall())})
+
+@app.route('/floors')
+def floors():
+    building = request.args.get('building')
+    cur = get_db().cursor()
+    cur.execute('select distinct floor from rooms where building = ?', (building,))
+    return jsonify({
+        'building': building,
+        'floors': flatten(cur.fetchall())})
+
+@app.route('/rooms')
+def rooms():
+    building = request.args.get('building')
+    floor = request.args.get('floor')
+    cur = get_db().cursor()
+    cur.execute('select room from rooms where building = ? and floor = ?', (building, floor))
+    return jsonify({
+        'building': building,
+        'floor': floor,
+        'rooms': flatten(cur.fetchall())
+        })
+
+if __name__ == '__main__':
+    app.run(debug=True)

@@ -1,0 +1,51 @@
+# coding: utf-8
+from datetime import datetime, timedelta
+
+from flask import Flask, jsonify, request
+
+from createdb import cur
+
+app = Flask('server')
+
+def flatten(a):
+    return [t[0] for t in a]
+
+@app.route('/')
+def root():
+    return app.send_static_file('index.html')
+
+@app.route('/buildings')
+def buildings():
+    cur.execute('select distinct building from rooms')
+    return jsonify({'buildings': flatten(cur.fetchall())})
+
+@app.route('/floors')
+def floors():
+    try:
+        building = request.args.get('building').encode('utf-8')
+    except AttributeError:
+        return error('Require <building> to be specified.')
+    cur.execute('select distinct floor from rooms where building = %s', (building,))
+    return jsonify({
+        'building': building,
+        'floors': flatten(cur.fetchall())})
+
+@app.route('/rooms')
+def rooms():
+    try:
+        building = request.args.get('building').encode('utf-8')
+        floor = request.args.get('floor').encode('utf-8')
+    except AttributeError:
+        return error('Require <building> and <floor> to be specified.')
+    cur.execute('select room from rooms where building = %s and floor = %s', (building, floor))
+    return jsonify({
+        'building': building,
+        'floor': floor,
+        'rooms': flatten(cur.fetchall())
+        })
+
+def error(msg):
+    return jsonify({'error': msg})
+
+if __name__ == '__main__':
+    app.run(debug=True)

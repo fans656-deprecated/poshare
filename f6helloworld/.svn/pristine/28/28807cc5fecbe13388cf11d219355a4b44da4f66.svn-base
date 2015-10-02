@@ -1,0 +1,14 @@
+from flask import Flask, jsonify
+import random
+
+app = Flask('server')
+
+@app.route('/')
+def index():
+    return 'hello world of sae'
+
+@app.route('/api/test')
+def test():
+    return jsonify({'name': 'fans656',
+        'lucky_number': random.randint(0,9)
+        })

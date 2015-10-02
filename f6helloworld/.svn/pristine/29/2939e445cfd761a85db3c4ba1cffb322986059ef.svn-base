@@ -1,0 +1,30 @@
+# coding: utf-8
+from flask import Flask, jsonify
+from datetime import datetime, timedelta
+
+app = Flask('server')
+
+@app.route('/')
+def root():
+    return app.send_static_file('index.html')
+
+@app.route('/api/<int:building>/<int:classroom>/classes')
+def classes(building, classroom):
+    today = datetime.today().date()
+    yesterday = today - timedelta(days=1)
+    tomorrow = today + timedelta(days=1)
+    return jsonify({'classes': [
+        {'date': str(yesterday), 'classses': [
+            {'name': u'高级数理逻辑', 'duration': [1,2]},
+            ]},
+        {'date': str(today), 'classses': [
+            {'name': u'图论及其应用', 'duration': [1,2,3]},
+            {'name': u'中国特色社会主义理论与实践研究', 'duration': [5,6]},
+            ]},
+        {'date': str(tomorrow), 'classses': [
+            {'name': u'计算机网络原理', 'duration': [1,2]},
+            ]},
+        ]})
+
+if __name__ == '__main__':
+    app.run(debug=True)
