@@ -1,13 +1,19 @@
 # coding: utf-8
+import os
+
 from flask import Flask
 
 from routes import routes
 
 app = Flask('server')
 
+path = os.path.dirname(os.path.abspath(__file__))
+path = os.path.join(path, 'static\\index.html')
+index_html = open(path).read()
+
 @app.route('/')
 def root():
-    return app.send_static_file('index.html')
+    return index_html
 
 for url, v in routes.items():
     func = v['func']

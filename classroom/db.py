@@ -9,23 +9,23 @@ elif db == 'mysql':
     import MySQLdb.cursors
 
     # localhost
-    #connect_args = {
-    #    'host': 'localhost',
-    #    'port': 3306,
-    #    'user': 'fans656',
-    #    'passwd': '',
-    #    'db': 'test',
-    #    'cursorclass': MySQLdb.cursors.DictCursor
-    #}
-    # pythonanywhere.com
     connect_args = {
-        'host': 'fans656.mysql.pythonanywhere-services.com',
-        #'port': 3306,
+        'host': 'localhost',
+        'port': 3306,
         'user': 'fans656',
-        'passwd': 'test',
-        'db': 'fans656$default',
+        'passwd': '',
+        'db': 'test',
         'cursorclass': MySQLdb.cursors.DictCursor
     }
+    # pythonanywhere.com
+    #connect_args = {
+    #    'host': 'fans656.mysql.pythonanywhere-services.com',
+    #    #'port': 3306,
+    #    'user': 'fans656',
+    #    'passwd': 'test',
+    #    'db': 'fans656$default',
+    #    'cursorclass': MySQLdb.cursors.DictCursor
+    #}
 
 con = db.connect(**connect_args)
 cur = con.cursor()
