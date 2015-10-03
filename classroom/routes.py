@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 from flask import jsonify, request
 
-from db import cur
+from db import get_cursor
 
 def to_array(d):
     return [t.values()[0] for t in d]
@@ -12,11 +12,13 @@ def error(msg):
     return jsonify({'error': msg})
 
 def buildings():
+    cur = get_cursor()
     cur.execute('select distinct building from rooms')
     r = cur.fetchall()
     return jsonify({'buildings': to_array(r)})
 
 def floors():
+    cur = get_cursor()
     try:
         building = request.args.get('building').encode('utf-8')
     except AttributeError:
@@ -27,6 +29,7 @@ def floors():
         'floors': to_array(cur.fetchall())})
 
 def rooms():
+    cur = get_cursor()
     try:
         building = request.args.get('building').encode('utf-8')
         floor = request.args.get('floor').encode('utf-8')
@@ -40,6 +43,7 @@ def rooms():
         })
 
 def lessons():
+    cur = get_cursor()
     try:
         building = request.args.get('building').encode('utf-8')
         room = request.args.get('room')
@@ -58,6 +62,7 @@ def lessons():
     return jsonify({'lessons': r})
 
 def rooms_of_lesson():
+    cur = get_cursor()
     lesson = request.args.get('lesson').encode('utf-8')
     date = request.args.get('date')
     weekday = datetime.strptime(date, '%Y-%m-%d').isoweekday()

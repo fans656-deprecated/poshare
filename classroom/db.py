@@ -27,10 +27,23 @@ elif db == 'mysql':
         'cursorclass': MySQLdb.cursors.DictCursor
     }
 
-con = db.connect(**connect_args)
-cur = con.cursor()
+def get_db():
+    t = getattr(g, '_database', None)
+    if t is None:
+        t = g._database = db.connect(**connect_args)
+    return t
+
+def get_cursor():
+    return get_db().cursor()
+
+@app.teardown_appcontext
+def close_connection(exception):
+    t = getattr(g, '_database', None)
+    if t is not None:
+        t.close()
 
 def create(table_name, schema, data):
+    cur = get_cursor()
     cur.execute(u'drop table if exists {}'.format(table_name))
     cur.execute(u'create table {} {}'.format(table_name, schema))
     lines = data.split('\n')
@@ -82,4 +95,4 @@ create('rooms',
     gen_rooms(u'主楼', 3))
     )
 
-con.commit()
+get_db().commit()
