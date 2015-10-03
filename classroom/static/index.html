@@ -1,0 +1,120 @@
+<html>
+<head>
+    <link rel="stylesheet" href="/static/index.css">
+</head>
+<body>
+<h1>北邮教室课程信息查询</h1>
+<p>RESTful API Documentation</p>
+<table>
+    <tbody>
+        <tr>
+            <th width=250>URL</th>
+            <th width=200>功能示例</th>
+            <th width=200>参数</th>
+            <th width=350>返回值示例</th>
+        </tr>
+
+        <tr>
+            <td>http://host/buildings</td>
+            <td>返回所有教学楼名称</td>
+            <td>无</td>
+            <td><pre>
+{
+  "buildings": [
+    "\u65591", "\u65592", "\u65593", "\u65594", "\u4e3b\u697c"
+  ]
+}</pre></td>
+        </tr>
+        <tr>
+            <td>http://host/floors?building=教1</td>
+            <td>返回教1的所有楼层</td>
+            <td>building={教学楼名称}</td>
+            <td><pre>
+{
+  "building": "\u65591", 
+  "floors": [
+    1, 2, 3, 4, 5, 6, 7, 8
+  ]
+}</pre></td>
+        </tr>
+
+        <tr>
+            <td>http://host/rooms?building=教1&floor=3</td>
+            <td>返回教1三层所有教室号</td>
+            <td>building={教学楼名称}<br>floor={楼层}</td>
+            <td><pre>
+{
+  "building": "\u65591", 
+  "floor": "3", 
+  "rooms": [
+    301, 302, 303, 304, 305, 306, 307, 308, 309, 310,
+    311, 312, 313, 314, 315, 316, 317, 318, 319, 320
+  ]
+}</pre></td>
+        </tr>
+
+        <!--
+        <tr>
+            <td>http://host/lessons?building=教1&room=235</td>
+            <td>返回最近7天在教1-235上的所有课程</td>
+            <td>building={教学楼名称}<br>room={教室号}</td>
+            <td><pre>
+</pre></td>
+        </tr>
+        !-->
+
+        <tr>
+            <td>http://host/lessons?building=教3&room=239&date=2015-09-28</td>
+            <td>返回2015-09-28在教3-239上的课程</td>
+            <td>building={教学楼名称}<br>room={教室号}<br>date={日期}</td>
+            <td><pre>
+{
+  "lessons": [
+    {
+      "beg": 1, 
+      "building": "\u65593", 
+      "date": "2015-09-28", 
+      "end": 2, 
+      "floor": 2, 
+      "lesson": "\u8ba1\u7b97\u673a\u7f51\u7edc\u5b9e\u9a8c", 
+      "room": 239, 
+      "teacher": "\u9a6c\u8dc3"
+    }, 
+    {
+      "beg": 5, 
+      "building": "\u65593", 
+      "date": "2015-09-28", 
+      "end": 6, 
+      "floor": 2, 
+      "lesson": "\u81ea\u7136\u8fa9\u8bc1\u6cd5\u6982\u8bba", 
+      "room": 239, 
+      "teacher": "\u8d75\u73b2"
+    }
+  ]
+}
+</pre></td>
+        </tr>
+
+        <tr>
+            <td>http://host/rooms-of-lesson?lesson=高级数理逻辑&date=2015-09-30</td>
+            <td>返回2015-09-30上高级数理逻辑的教室</td>
+            <td>lesson={课程名称}<br>date={日期}</td>
+            <td><pre>
+{
+  "lesson": "\u9ad8\u7ea7\u6570\u7406\u903b\u8f91", 
+  "rooms": [
+    {
+      "beg": 9, 
+      "building": "\u65593", 
+      "end": 11, 
+      "room": 235, 
+      "teacher": "\u6f58\u7ef4\u6c11"
+    }
+  ]
+}</pre></td>
+        </tr>
+
+    </tbody>
+</table>
+</body>
+</html>
