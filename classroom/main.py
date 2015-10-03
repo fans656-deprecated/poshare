@@ -8,7 +8,7 @@ from routes import routes
 app = Flask('server')
 
 path = os.path.dirname(os.path.abspath(__file__))
-path = os.path.join(path, 'static\\index.html')
+path = os.path.join(path, 'static/index.html')
 index_html = open(path).read()
 
 @app.route('/')
