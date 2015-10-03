@@ -20,7 +20,7 @@ elif db == 'mysql':
     # pythonanywhere.com
     connect_args = {
         'host': 'fans656.mysql.pythonanywhere-services.com',
-        'port': 3306,
+        #'port': 3306,
         'user': 'fans656',
         'passwd': 'test',
         'db': 'fans656$default',
