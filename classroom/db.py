@@ -1,6 +1,6 @@
 # coding: utf-8
-db = 'sqlite'
-#db = 'mysql'
+#db = 'sqlite'
+db = 'mysql'
 
 if db == 'sqlite':
     import sqlite3 as db
@@ -8,13 +8,23 @@ elif db == 'mysql':
     import MySQLdb as db
     import MySQLdb.cursors
 
+    # localhost
+    #connect_args = {
+    #    'host': 'localhost',
+    #    'port': 3306,
+    #    'user': 'fans656',
+    #    'passwd': '',
+    #    'db': 'test',
+    #    'cursorclass': MySQLdb.cursors.DictCursor
+    #}
+    # pythonanywhere.com
     connect_args = {
-        host: 'localhost',
-        port: 3306,
-        user: 'fans656',
-        passwd: '',
-        db: 'test',
-        cursorclass=MySQLdb.cursors.DictCursor
+        'host': 'fans656.mysql.pythonanywhere-services.com',
+        'port': 3306,
+        'user': 'fans656',
+        'passwd': 'test',
+        'db': 'fans656$default',
+        'cursorclass': MySQLdb.cursors.DictCursor
     }
 
 con = db.connect(**connect_args)

@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 from flask import jsonify, request
 
-from createdb import cur
+from db import cur
 
 def to_array(d):
     return [t.values()[0] for t in d]
