@@ -8,8 +8,8 @@ app = Flask('server')
 from routes import routes
 from db import create_tables
 
-with app.app_context():
-    create_tables()
+#with app.app_context():
+#    create_tables()
 
 @app.teardown_appcontext
 def close_connection(exception):
