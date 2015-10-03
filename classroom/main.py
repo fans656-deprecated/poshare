@@ -1,11 +1,21 @@
 # coding: utf-8
 import os
 
-from flask import Flask
-
-from routes import routes
+from flask import Flask, g
 
 app = Flask('server')
+
+from routes import routes
+from db import create_tables
+
+with app.app_context():
+    create_tables()
+
+@app.teardown_appcontext
+def close_connection(exception):
+    t = getattr(g, '_database', None)
+    if t is not None:
+        t.close()
 
 path = os.path.dirname(os.path.abspath(__file__))
 path = os.path.join(path, 'static/index.html')

@@ -1,4 +1,6 @@
 # coding: utf-8
+from flask import g
+
 #db = 'sqlite'
 db = 'mysql'
 
@@ -9,23 +11,23 @@ elif db == 'mysql':
     import MySQLdb.cursors
 
     # localhost
-    #connect_args = {
-    #    'host': 'localhost',
-    #    'port': 3306,
-    #    'user': 'fans656',
-    #    'passwd': '',
-    #    'db': 'test',
-    #    'cursorclass': MySQLdb.cursors.DictCursor
-    #}
-    # pythonanywhere.com
     connect_args = {
-        'host': 'fans656.mysql.pythonanywhere-services.com',
-        #'port': 3306,
+        'host': 'localhost',
+        'port': 3306,
         'user': 'fans656',
-        'passwd': 'test',
-        'db': 'fans656$default',
+        'passwd': '',
+        'db': 'test',
         'cursorclass': MySQLdb.cursors.DictCursor
     }
+    # pythonanywhere.com
+    #connect_args = {
+    #    'host': 'fans656.mysql.pythonanywhere-services.com',
+    #    #'port': 3306,
+    #    'user': 'fans656',
+    #    'passwd': 'test',
+    #    'db': 'fans656$default',
+    #    'cursorclass': MySQLdb.cursors.DictCursor
+    #}
 
 def get_db():
     t = getattr(g, '_database', None)
@@ -35,12 +37,6 @@ def get_db():
 
 def get_cursor():
     return get_db().cursor()
-
-@app.teardown_appcontext
-def close_connection(exception):
-    t = getattr(g, '_database', None)
-    if t is not None:
-        t.close()
 
 def create(table_name, schema, data):
     cur = get_cursor()
@@ -52,47 +48,48 @@ def create(table_name, schema, data):
         cmd = u'insert into {} values {}'.format(table_name, line)
         cur.execute(cmd.encode('utf-8'))
 
-# lessons
-create('lessons',
-    '''(
-        lesson varchar(255),
-        teacher varchar(255),
+def create_tables():
+    # lessons
+    create('lessons',
+        '''(
+            lesson varchar(255),
+            teacher varchar(255),
+            building varchar(255),
+            floor int,
+            room int,
+            weekday int,
+            beg int,
+            end int
+            )''',
+        u'''
+        ('计算机网络实验', '马跃', '教3', 2, 239, 1, 1, 2)
+        ('自然辩证法概论', '赵玲', '教3', 2, 239, 1, 5, 6)
+        ('图论及其应用', '卓新建', '教3', 1, 132, 3, 1, 3)
+        ('中国特色社会主义理论与实践研究', '李钢', '教3', 2, 239, 3, 5, 6)
+        ('高级数理逻辑', '潘维民', '教3', 2, 235, 3, 9, 11)
+        ('移动通信网原理与技术', '周文安', '主楼', 2, 206, 4, 5, 6)
+        ('计算机网络原理', '马跃', '主楼', 2, 212, 5, 1, 2)
+        ''')
+
+    # rooms
+    def gen_rooms(building, floors):
+        return [
+            u"('{}', '{}', '{}{:02}')".format(
+                building, floor, floor, room)
+            for floor in range(1, floors+1) for room in range(1,20+1)
+            ]
+
+    create('rooms',
+        '''(
         building varchar(255),
         floor int,
-        room int,
-        weekday int,
-        beg int,
-        end int
+        room int
         )''',
-    u'''
-    ('计算机网络实验', '马跃', '教3', 2, 239, 1, 1, 2)
-    ('自然辩证法概论', '赵玲', '教3', 2, 239, 1, 5, 6)
-    ('图论及其应用', '卓新建', '教3', 1, 132, 3, 1, 3)
-    ('中国特色社会主义理论与实践研究', '李钢', '教3', 2, 239, 3, 5, 6)
-    ('高级数理逻辑', '潘维民', '教3', 2, 235, 3, 9, 11)
-    ('移动通信网原理与技术', '周文安', '主楼', 2, 206, 4, 5, 6)
-    ('计算机网络原理', '马跃', '主楼', 2, 212, 5, 1, 2)
-    ''')
+        '\n'.join(gen_rooms(u'教1', 8) +
+        gen_rooms(u'教2', 8) +
+        gen_rooms(u'教3', 15) +
+        gen_rooms(u'教4', 8) +
+        gen_rooms(u'主楼', 3))
+        )
 
-# rooms
-def gen_rooms(building, floors):
-    return [
-        u"('{}', '{}', '{}{:02}')".format(
-            building, floor, floor, room)
-        for floor in range(1, floors+1) for room in range(1,20+1)
-        ]
-
-create('rooms',
-    '''(
-    building varchar(255),
-    floor int,
-    room int
-    )''',
-    '\n'.join(gen_rooms(u'教1', 8) +
-    gen_rooms(u'教2', 8) +
-    gen_rooms(u'教3', 15) +
-    gen_rooms(u'教4', 8) +
-    gen_rooms(u'主楼', 3))
-    )
-
-get_db().commit()
+    get_db().commit()
