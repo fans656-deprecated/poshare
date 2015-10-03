@@ -38,8 +38,7 @@ def get_db():
 def get_cursor():
     return get_db().cursor()
 
-def create(table_name, schema, data):
-    cur = get_cursor()
+def create(cur, table_name, schema, data):
     cur.execute(u'drop table if exists {}'.format(table_name))
     cur.execute(u'create table {} {}'.format(table_name, schema))
     lines = data.split('\n')
@@ -49,8 +48,10 @@ def create(table_name, schema, data):
         cur.execute(cmd.encode('utf-8'))
 
 def create_tables():
+    con = db.connect(**connect_args)
+    cur = con.cursor()
     # lessons
-    create('lessons',
+    create(cur, 'lessons',
         '''(
             lesson varchar(255),
             teacher varchar(255),
@@ -79,7 +80,7 @@ def create_tables():
             for floor in range(1, floors+1) for room in range(1,20+1)
             ]
 
-    create('rooms',
+    create(cur, 'rooms',
         '''(
         building varchar(255),
         floor int,
@@ -92,4 +93,5 @@ def create_tables():
         gen_rooms(u'主楼', 3))
         )
 
-    get_db().commit()
+    con.commit()
+    con.close()
