@@ -2,8 +2,10 @@
 import os
 
 from flask import Flask, g
+from flask.ext.cors import CORS
 
 app = Flask('server')
+CORS(app)
 
 from routes import routes
 from db import create_tables
