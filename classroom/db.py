@@ -10,6 +10,15 @@ elif db == 'mysql':
     import MySQLdb as db
     import MySQLdb.cursors
 
+    # pythonanywhere.com
+    connect_args = {
+        'host': 'fans656.mysql.pythonanywhere-services.com',
+        #'port': 3306,
+        'user': 'fans656',
+        'passwd': 'test',
+        'db': 'fans656$default',
+        'cursorclass': MySQLdb.cursors.DictCursor
+    }
     # localhost
     connect_args = {
         'host': 'localhost',
@@ -19,15 +28,6 @@ elif db == 'mysql':
         'db': 'test',
         'cursorclass': MySQLdb.cursors.DictCursor
     }
-    # pythonanywhere.com
-    #connect_args = {
-    #    'host': 'fans656.mysql.pythonanywhere-services.com',
-    #    #'port': 3306,
-    #    'user': 'fans656',
-    #    'passwd': 'test',
-    #    'db': 'fans656$default',
-    #    'cursorclass': MySQLdb.cursors.DictCursor
-    #}
 
 def get_db():
     t = getattr(g, '_database', None)
