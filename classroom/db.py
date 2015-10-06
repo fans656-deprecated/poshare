@@ -77,7 +77,7 @@ def create_tables():
         return [
             u"('{}', '{}', '{}{:02}')".format(
                 building, floor, floor, room)
-            for floor in range(1, floors+1) for room in range(1,20+1)
+            for floor in range(1, floors+1) for room in range(1,40+1)
             ]
 
     create(cur, 'rooms',
