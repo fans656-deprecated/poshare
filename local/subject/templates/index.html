@@ -1,0 +1,58 @@
+<html>
+<head>
+    <style type="text/css">
+* {
+    font-family: 'Microsoft YaHei';
+}
+table {
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+}
+table th {
+	height: 30px;
+	line-height: 30px;
+	font-size: 12px;
+	text-align: left;
+	padding: 0 6px 0 10px;	
+	border: 1px solid #ccc;
+	background: #eef4fe;
+}
+table td {
+	height: 30px;
+	font-size: 12px;
+	line-height: 20px;
+	padding: 0 6px 0 10px;
+	border: 1px solid #ccc;
+}
+    </style>
+</head>
+<body>
+<table>
+    <tbody>
+        <tr>
+            <th width=250>URL</th>
+            <th width=200>功能示例</th>
+            <th width=200>参数</th>
+            <th width=350>返回值示例</th>
+        </tr>
+        <tr>
+            <td>http://host/subjects</td>
+            <td>返回所有课程名称</td>
+            <td>无</td>
+            <td><pre>{
+  "subjects": [
+    "计算机网络实验"
+  ]
+}</pre></td>
+        </tr>
+        <tr>
+            <td>http://host/description?name=计算机网络实验</td>
+            <td>返回计算机网络实验的描述</td>
+            <td>name={课程名称}</td>
+            <td><pre>{
+    "name": "计算机网络实验",
+    "description": "&lt;div&gt;...课程描述...&lt;/div&gt;"
+}</pre></td>
+        </tr>
+</body>
+</html>

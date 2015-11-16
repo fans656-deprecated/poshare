@@ -1,14 +1,23 @@
 # coding: utf-8
 from flask import g
 
-#db = 'sqlite'
 db = 'mysql'
+db = 'sqlite'
 
 if db == 'sqlite':
     import sqlite3 as db
+    # localhost
+    connect_args = {
+        'database': 'data.db',
+    }
+    def to_array(d):
+        return [t[0] for t in d]
 elif db == 'mysql':
     import MySQLdb as db
     import MySQLdb.cursors
+
+    def to_array(d):
+        return [t.values()[0] for t in d]
 
     # pythonanywhere.com
     connect_args = {

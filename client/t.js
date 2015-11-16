@@ -1,4 +1,5 @@
 host = 'http://10.105.41.230:6560/'
+host = 'http://fans656.pythonanywhere.com/'
 
 $(function() {
     $.ajax({
